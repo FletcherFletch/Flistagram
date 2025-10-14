@@ -12,13 +12,21 @@ class home_view(View):
 
         return render(request, "Home/profile.html")
     
+class post_detail(View):
+
+    def get(request, id):
+        post = Post.objects.get(id=id)
+
+        return render(request, 'post_detail.html', {'post': post})
+    
 class profile_view(View):
 
     def get(self, request):
         form = PostForm()
-        posts = Post.objects.filter()
+        user_posts = Post.objects.filter(author=request.user)
+        total_posts = user_posts.count()
         
-        return render(request, "Home/profile.html", {'form': form, 'posts': posts})
+        return render(request, "Home/profile.html", {'form': form, 'posts': user_posts, 'total_posts': total_posts})
 
     def post(self, request):
 
@@ -27,11 +35,18 @@ class profile_view(View):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            total_posts = Post.objects.count()
+           
             
             return redirect('profile')
-        posts = Post.objects.filter()
-        return render(request, "Home/profile.html", {'form': form, 'posts': posts, 'total_posts': total_posts})
+        
+        user_posts = Post.objects.filter(author=request.user)
+        total_posts = user_posts.count()
+        #needed to use the built in count to count the instances of post object, used autho=request.user to 
+        #filter it to specific users. 
+        return render(request, "Home/profile.html", {'form': form, 'post': user_posts, 'total_posts': total_posts})
+    
+
+
     
 class register_view(View):
 
@@ -76,7 +91,7 @@ class login_view(View):
     
     def post(self, request):
 
-        form = SignUpForm(request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']

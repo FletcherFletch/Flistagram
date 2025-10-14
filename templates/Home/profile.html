@@ -45,7 +45,7 @@
         {% for post in posts %}
             <div class="gallery-item">
                 <a href="{% url 'post_detail' post.id %}">
-                    <img src="{{ post.image.url }}" alt="Post image">
+                    <img src="{{ post.picture.url }}" alt="Post image">
                 </a>
             </div>
         {% empty %}
@@ -73,8 +73,6 @@
     function toggleForm() {
         const formContainer = document.getElementById('postFormContainer');
         formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-
-
     }
 </script>
 {% endblock %}
