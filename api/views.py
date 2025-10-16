@@ -12,10 +12,19 @@ class home_view(View):
 
         return render(request, "Home/profile.html")
     
+class edit_profile(View):
+    def get(self, request):
+        
+        return render(request, )
+    
 class post_detail(View):
 
-    def get(request, id):
-        post = Post.objects.get(id=id)
+    def get(self, request, *args, **kwargs):
+        # this extracts the id from kwargs then we can set that equal to id
+        #django passes the url id in kwargs no as a direct argument so putting id in the get arguement wont work
+        #
+        post_id = kwargs.get('id')
+        post = Post.objects.get(id=post_id)
 
         return render(request, 'post_detail.html', {'post': post})
     

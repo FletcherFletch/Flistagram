@@ -1,0 +1,95 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="post-detail-container">
+    <div class="post-image">
+        <img src="{{ post.picture.url }}" alt="Post by {{ post.author.username }}">
+    </div>
+
+    <div class="post-info">
+        <div class="post-author">
+            <strong>{{ post.author.username }}</strong>
+        </div>
+        <div class="post-caption">
+            <p>{{ post.title }}</p>
+            <p>{{ post.description }} </p>
+        </div>
+
+        <hr>
+
+        <div class="post-comments">
+            <h4>Comments</h4>
+            {% if comments %}
+                <ul>
+                    {% for comment in comments %}
+                        <li>
+                            <strong>{{ comment.author.username }}</strong>:
+                            {{ comment.content }}
+                            <small class="timestamp">{{ comment.created_at|timesince }} ago</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No comments yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="add-comment">
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit">Add Comment</button>
+            </form>
+        </div>
+
+        <div class="like-section">
+            
+        </div>
+    </div>
+</div>
+
+<style>
+.post-detail-container {
+    display: flex;
+    max-width: 800px;
+    margin: 40px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.post-image img {
+    width: 400px;
+    height: auto;
+    object-fit: cover;
+}
+
+.post-info {
+    padding: 20px;
+    width: 100%;
+}
+
+.post-comments ul {
+    list-style: none;
+    padding: 0;
+}
+
+.post-comments li {
+    margin-bottom: 10px;
+}
+
+.add-comment input[type="text"],
+.add-comment textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.timestamp {
+    color: gray;
+    font-size: 0.8em;
+}
+</style>
+{% endblock %}
